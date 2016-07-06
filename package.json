@@ -1,0 +1,19 @@
+{
+    "name": "rx-pc-ble-driver-js",
+    "version": "0.2.0",
+    "description": "Reactive Extensions to pc-ble-driver-js library",
+    "main": "index.js",
+    "scripts": {},
+    "keywords": [
+        "Reactive",
+        "Extensions",
+        "BLE",
+        "NordicSemi"
+    ],
+    "author": "Kapil Sachdeva <ksachdeva17@gmail.com>",
+    "license": "MIT",
+    "dependencies": {
+        "pc-ble-driver-js": "git+https://github.com/ksachdeva/pc-ble-driver-js.git",
+        "rxjs": "^5.0.0-beta.9"
+    }
+}
