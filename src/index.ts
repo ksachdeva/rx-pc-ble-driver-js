@@ -66,6 +66,7 @@ export function openAdapaterObservable(adapter: Adapter,
         return;
       }
       obs.next(adapter);
+      obs.complete();
     });
 
     return () => {
@@ -109,6 +110,7 @@ export function stopScanDevicesObservable(adapter: Adapter): Observable<void> {
             return;
           }
           obs.next();
+          obs.complete();
         });
       } else {
         obs.next();
@@ -121,14 +123,15 @@ export function stopScanDevicesObservable(adapter: Adapter): Observable<void> {
   });
 }
 
-export function discoverServicesObservable(adapter: Adapter, device: Device): Observable<Service> {
-  return Observable.create((obs: Subscriber<Service>) => {
+export function discoverServicesObservable(adapter: Adapter, device: Device): Observable<Service[]> {
+  return Observable.create((obs: Subscriber<Service[]>) => {
     adapter.getServices(device.instanceId, (err, services) => {
       if (err) {
         obs.error(err);
         return;
       }
-      services.forEach((s) => obs.next(s));
+      obs.next(services);
+      obs.complete();
     });
 
     return () => {
@@ -137,15 +140,16 @@ export function discoverServicesObservable(adapter: Adapter, device: Device): Ob
 }
 
 export function discoverCharacteristicObservable(adapter: Adapter,
-  service: Service): Observable<Characteristic> {
+  service: Service): Observable<Characteristic[]> {
 
-  return Observable.create((obs: Subscriber<Characteristic>) => {
+  return Observable.create((obs: Subscriber<Characteristic[]>) => {
     adapter.getCharacteristics(service.instanceId, (err, chars) => {
       if (err) {
         obs.error(err);
         return;
       }
-      chars.forEach(c => obs.next(c));
+      obs.next(chars);
+      obs.complete();
     });
 
     return () => {
@@ -164,6 +168,7 @@ export function readCharacteristicObservable(adapter: Adapter,
         return;
       }
       obs.next(toHexString(value));
+      obs.complete();
     });
 
     return () => {
@@ -178,6 +183,7 @@ export function connectDeviceObservable(adapter: Adapter, device: Device,
 
     function onDeviceConnected(connectedDevice) {
       obs.next(connectedDevice);
+      obs.complete();
     }
 
     adapter.on('deviceConnected', onDeviceConnected);
@@ -204,6 +210,7 @@ export function disconnectDeviceObservable(adapter: Adapter, device: Device): Ob
         return;
       }
       obs.next();
+      obs.complete();
     });
 
     return () => {

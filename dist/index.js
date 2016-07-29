@@ -14,13 +14,13 @@ function adapaterFactoryObservable(adapterFactory) {
     return rxjs_1.Observable.create((obs) => {
         function onAdded(adapter) {
             obs.next({
-                adapter,
+                adapter: adapter,
                 eventType: AdapterFactoryEventType.Added
             });
         }
         function onRemoved(adapter) {
             obs.next({
-                adapter,
+                adapter: adapter,
                 eventType: AdapterFactoryEventType.Removed
             });
         }
@@ -41,6 +41,7 @@ function openAdapaterObservable(adapter, openOptions) {
                 return;
             }
             obs.next(adapter);
+            obs.complete();
         });
         return () => {
         };
@@ -75,6 +76,7 @@ function stopScanDevicesObservable(adapter) {
                         return;
                     }
                     obs.next();
+                    obs.complete();
                 });
             }
             else {
@@ -93,7 +95,8 @@ function discoverServicesObservable(adapter, device) {
                 obs.error(err);
                 return;
             }
-            services.forEach((s) => obs.next(s));
+            obs.next(services);
+            obs.complete();
         });
         return () => {
         };
@@ -107,7 +110,8 @@ function discoverCharacteristicObservable(adapter, service) {
                 obs.error(err);
                 return;
             }
-            chars.forEach(c => obs.next(c));
+            obs.next(chars);
+            obs.complete();
         });
         return () => {
         };
@@ -122,6 +126,7 @@ function readCharacteristicObservable(adapter, characteristic) {
                 return;
             }
             obs.next(toHexString(value));
+            obs.complete();
         });
         return () => {
         };
@@ -132,6 +137,7 @@ function connectDeviceObservable(adapter, device, options) {
     return rxjs_1.Observable.create((obs) => {
         function onDeviceConnected(connectedDevice) {
             obs.next(connectedDevice);
+            obs.complete();
         }
         adapter.on('deviceConnected', onDeviceConnected);
         adapter.connect(device.address, options, (err) => {
@@ -154,6 +160,7 @@ function disconnectDeviceObservable(adapter, device) {
                 return;
             }
             obs.next();
+            obs.complete();
         });
         return () => {
         };

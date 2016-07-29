@@ -1,6 +1,6 @@
 {
     "name": "rx-pc-ble-driver-js",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "description": "Reactive Extensions to pc-ble-driver-js library",
     "main": "dist/index.js",
     "typings": "dist/index.d.ts",
