@@ -74,6 +74,23 @@ export function openAdapterObservable(adapter: Adapter,
   });
 }
 
+export function closeAdapterObservable(adapter: Adapter) {
+  return Observable.create((obs: Subscriber<Adapter>) => {
+
+    adapter.close((error) => {
+      if (error) {
+        obs.error(error);
+        return;
+      }
+      obs.next(adapter);
+      obs.complete();
+    });
+
+    return () => {
+    };
+  });
+}
+
 export function startScanDevicesObservable(adapter: Adapter,
   scanOptions: ScanParameters): Observable<Device> {
 
