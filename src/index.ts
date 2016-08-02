@@ -26,7 +26,7 @@ export interface AdapterEvent {
   eventType: AdapterFactoryEventType;
 }
 
-export function adapaterFactoryObservable(
+export function adapterFactoryObservable(
   adapterFactory: AdapterFactory): Observable<AdapterEvent> {
 
   return Observable.create((obs: Subscriber<AdapterEvent>) => {
@@ -55,10 +55,10 @@ export function adapaterFactoryObservable(
   });
 }
 
-export function openAdapaterObservable(adapter: Adapter,
+export function openAdapterObservable(adapter: Adapter,
   openOptions?: AdapterOpenOptions): Observable<Adapter> {
 
-  return Observable.create((obs: Subscriber<any>) => {
+  return Observable.create((obs: Subscriber<Adapter>) => {
 
     adapter.open(openOptions, (error) => {
       if (error) {

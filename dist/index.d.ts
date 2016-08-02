@@ -8,8 +8,8 @@ export interface AdapterEvent {
     adapter: Adapter;
     eventType: AdapterFactoryEventType;
 }
-export declare function adapaterFactoryObservable(adapterFactory: AdapterFactory): Observable<AdapterEvent>;
-export declare function openAdapaterObservable(adapter: Adapter, openOptions?: AdapterOpenOptions): Observable<Adapter>;
+export declare function adapterFactoryObservable(adapterFactory: AdapterFactory): Observable<AdapterEvent>;
+export declare function openAdapterObservable(adapter: Adapter, openOptions?: AdapterOpenOptions): Observable<Adapter>;
 export declare function startScanDevicesObservable(adapter: Adapter, scanOptions: ScanParameters): Observable<Device>;
 export declare function stopScanDevicesObservable(adapter: Adapter): Observable<void>;
 export declare function discoverServicesObservable(adapter: Adapter, device: Device): Observable<Service[]>;

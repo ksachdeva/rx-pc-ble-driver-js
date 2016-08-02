@@ -10,7 +10,7 @@ function toHexString(byteArray) {
     AdapterFactoryEventType[AdapterFactoryEventType["Removed"] = 1] = "Removed";
 })(exports.AdapterFactoryEventType || (exports.AdapterFactoryEventType = {}));
 var AdapterFactoryEventType = exports.AdapterFactoryEventType;
-function adapaterFactoryObservable(adapterFactory) {
+function adapterFactoryObservable(adapterFactory) {
     return rxjs_1.Observable.create((obs) => {
         function onAdded(adapter) {
             obs.next({
@@ -32,8 +32,8 @@ function adapaterFactoryObservable(adapterFactory) {
         };
     });
 }
-exports.adapaterFactoryObservable = adapaterFactoryObservable;
-function openAdapaterObservable(adapter, openOptions) {
+exports.adapterFactoryObservable = adapterFactoryObservable;
+function openAdapterObservable(adapter, openOptions) {
     return rxjs_1.Observable.create((obs) => {
         adapter.open(openOptions, (error) => {
             if (error) {
@@ -47,7 +47,7 @@ function openAdapaterObservable(adapter, openOptions) {
         };
     });
 }
-exports.openAdapaterObservable = openAdapaterObservable;
+exports.openAdapterObservable = openAdapterObservable;
 function startScanDevicesObservable(adapter, scanOptions) {
     return rxjs_1.Observable.create((obs) => {
         function onDeviceDiscovered(device) {
