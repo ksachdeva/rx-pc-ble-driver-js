@@ -16,6 +16,42 @@ function toHexString(byteArray) {
   }).join('');
 }
 
+export class ScanError extends Error {
+  constructor(public driverError: any) {
+    super();
+  }
+}
+
+export class ConnectError extends Error {
+  constructor(public driverError: any, public device: Device) {
+    super();
+  }
+};
+
+export class DisconnectError extends Error {
+  constructor(public driverError: any, public device: Device) {
+    super();
+  }
+};
+
+export class ServiceDiscoveryError extends Error {
+  constructor(public driverError: any, public device: Device) {
+    super();
+  }
+}
+
+export class CharacteristicDiscoveryError extends Error {
+  constructor(public driverError: any, public service: Service) {
+    super();
+  }
+}
+
+export class ReadCharacteristicError extends Error {
+  constructor(public driverError: any, public ch: Characteristic) {
+    super();
+  }
+}
+
 export enum AdapterFactoryEventType {
   Added,
   Removed
@@ -104,7 +140,7 @@ export function startScanDevicesObservable(adapter: Adapter,
 
     adapter.startScan(scanOptions, (error) => {
       if (error) {
-        obs.error(error);
+        obs.error(new ScanError(error));
         return;
       }
     });
@@ -144,7 +180,7 @@ export function discoverServicesObservable(adapter: Adapter, device: Device): Ob
   return Observable.create((obs: Subscriber<Service[]>) => {
     adapter.getServices(device.instanceId, (err, services) => {
       if (err) {
-        obs.error(err);
+        obs.error(new ServiceDiscoveryError(err, device));
         return;
       }
       obs.next(services);
@@ -162,7 +198,7 @@ export function discoverCharacteristicObservable(adapter: Adapter,
   return Observable.create((obs: Subscriber<Characteristic[]>) => {
     adapter.getCharacteristics(service.instanceId, (err, chars) => {
       if (err) {
-        obs.error(err);
+        obs.error(new CharacteristicDiscoveryError(err, service));
         return;
       }
       obs.next(chars);
@@ -181,7 +217,7 @@ export function readCharacteristicObservable(adapter: Adapter,
 
     adapter.readCharacteristicValue(characteristic.instanceId, (err, value) => {
       if (err) {
-        obs.error(err);
+        obs.error(new ReadCharacteristicError(err, characteristic));
         return;
       }
       obs.next(toHexString(value));
@@ -207,7 +243,7 @@ export function connectDeviceObservable(adapter: Adapter, device: Device,
 
     adapter.connect(device.address, options, (err) => {
       if (err) {
-        obs.error(err);
+        obs.error(new ConnectError(err, device));
         return;
       }
     });
@@ -223,7 +259,7 @@ export function disconnectDeviceObservable(adapter: Adapter, device: Device): Ob
   return Observable.create((obs: Subscriber<void>) => {
     adapter.disconnect(device.instanceId, (err) => {
       if (err) {
-        obs.error(err);
+        obs.error(new DisconnectError(err, device));
         return;
       }
       obs.next();
